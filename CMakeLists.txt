@@ -137,6 +137,7 @@ set(DEMOS
   demo_MBS_collision_trimesh
   demo_MBS_collisionNSC
   demo_MBS_collisionSMC
+  demo_MBS_convexhullChBodyEasySMC
   demo_MBS_convexhullSMC
   demo_MBS_fallingboxNSC
   demo_MBS_fallingboxSMC
