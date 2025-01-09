@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iomanip>
+#include <vector>
 #include "assets/ChColor.h"
 #include "assets/ChVisualSystem.h"
 #include "chrono/physics/ChSystemSMC.h"
@@ -11,7 +12,9 @@
 #include "chrono/geometry/ChTriangleMeshConnected.h"
 #include "chrono/collision/ChConvexDecomposition.h"
 #include "chrono/utils/ChUtilsCreators.h"
+#include "chrono/collision/bullet/ChCollisionUtilsBullet.h"
 #include "collision/ChCollisionModel.h"
+#include "collision/ChCollisionShapeConvexHull.h"
 #include "collision/ChCollisionSystem.h"
 #include "core/ChGlobal.h"
 #include "core/ChMatrix.h"
@@ -75,16 +78,20 @@ int main() {
 
     // Create the ground
     {
-        std::string                 groud_file = "/home/joe/repo/chrono-collision-test/data/obj/Ground.obj";
-        auto                        groud_mesh = chrono_types::make_shared<ChTriangleMeshConnected>();
-        ChConvexDecompositionHACDv2 groud_decomposition;
-        assert(utils::LoadConvexMesh(groud_file, *groud_mesh.get(), groud_decomposition));
-
-        std::cout << "The size of convex hull(Ground): " << groud_decomposition.GetHullCount() << std::endl;
-
         auto ground = chrono_types::make_shared<ChBodyAuxRef>();
         ground->SetName("Ground");
         ground->SetFixed(true);
+
+        auto groud_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile(
+            "/home/joe/repo/chrono-collision-test/data/obj/Ground.obj");
+
+        auto groud_vis_shape = chrono_types::make_shared<ChVisualShapeTriangleMesh>();
+        groud_vis_shape->SetMutable(false);
+
+        bt_utils::ChConvexHullLibraryWrapper lh;
+        lh.ComputeHull(groud_mesh->GetCoordsVertices(), *groud_vis_shape->GetMesh());
+
+        ground->AddVisualShape(groud_vis_shape);
 
         double       mass;
         ChVector3d   com;
@@ -103,8 +110,14 @@ int main() {
 
         ground->SetFrameCOMToRef(ChFrame<>(com, principal_inertia_csys));
 
-        utils::AddConvexCollisionModel(ground, mat, groud_mesh, groud_decomposition, true);
+        std::vector<ChVector3d> points_reduced;
+        points_reduced.resize(groud_vis_shape->GetMesh()->GetNumVertices());
+        for (unsigned int i = 0; i < groud_vis_shape->GetMesh()->GetNumVertices(); ++i) {
+            points_reduced[i] = groud_vis_shape->GetMesh()->GetCoordsVertices()[i];
+        }
 
+        auto ground_cnt_shape = chrono_types::make_shared<ChCollisionShapeConvexHull>(mat, points_reduced);
+        ground->AddCollisionShape(ground_cnt_shape);
         ground->EnableCollision(true);
 
         sys.AddBody(ground);
@@ -112,21 +125,24 @@ int main() {
 
     // Create a falling box
     {
-        std::string falling_box_file = "/home/joe/repo/chrono-collision-test/data/obj/FallingBoxPerpendicular.obj";
-        auto        falling_box_mesh = chrono_types::make_shared<ChTriangleMeshConnected>();
-        ChConvexDecompositionHACDv2 falling_box_decomposition;
-        assert(utils::LoadConvexMesh(falling_box_file, *falling_box_mesh.get(), falling_box_decomposition));
-
-        std::cout << "The size of convex hull(Falling Box): " << falling_box_decomposition.GetHullCount() << std::endl;
-
         auto falling_box = chrono_types::make_shared<ChBodyAuxRef>();
         falling_box->SetName("FallingBox");
-        falling_box->SetFixed(false);
+
+        auto falling_box_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile(
+            "/home/joe/repo/chrono-collision-test/data/obj/FallingBoxPerpendicular.obj");
+
+        auto falling_box_vis_shape = chrono_types::make_shared<ChVisualShapeTriangleMesh>();
+        falling_box_vis_shape->SetMutable(false);
+
+        bt_utils::ChConvexHullLibraryWrapper lh;
+        lh.ComputeHull(falling_box_mesh->GetCoordsVertices(), *falling_box_vis_shape->GetMesh());
+
+        falling_box->AddVisualShape(falling_box_vis_shape);
 
         double       mass;
-        ChVector3d   cog;
+        ChVector3d   com;
         ChMatrix33<> inertia;
-        falling_box_mesh->ComputeMassProperties(true, mass, cog, inertia);
+        falling_box_mesh->ComputeMassProperties(true, mass, com, inertia);
 
         ChMatrix33d          principal_inertia_csys;
         ChVectorN<double, 3> principal_inertia;
@@ -138,10 +154,16 @@ int main() {
         falling_box->SetMass(mass * density);
         falling_box->SetInertiaXX(density * ChVector3d(principal_inertia));
 
-        falling_box->SetFrameCOMToRef(ChFrame<>(cog, principal_inertia_csys));
+        falling_box->SetFrameCOMToRef(ChFrame<>(com, principal_inertia_csys));
 
-        utils::AddConvexCollisionModel(falling_box, mat, falling_box_mesh, falling_box_decomposition, true);
+        std::vector<ChVector3d> points_reduced;
+        points_reduced.resize(falling_box_vis_shape->GetMesh()->GetNumVertices());
+        for (unsigned int i = 0; i < falling_box_vis_shape->GetMesh()->GetNumVertices(); ++i) {
+            points_reduced[i] = falling_box_vis_shape->GetMesh()->GetCoordsVertices()[i];
+        }
 
+        auto falling_box_cnt_shape = chrono_types::make_shared<ChCollisionShapeConvexHull>(mat, points_reduced);
+        falling_box->AddCollisionShape(falling_box_cnt_shape);
         falling_box->EnableCollision(true);
 
         falling_box->SetFrameRefToAbs(ChFrame<>(ChVector3d(0.0, 0.0, 1.0)));
