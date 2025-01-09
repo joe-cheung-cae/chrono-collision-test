@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "assets/ChColor.h"
 #include "assets/ChVisualSystem.h"
 #include "chrono/physics/ChSystemSMC.h"
@@ -36,7 +37,8 @@ class MyCallBackOnAddContack : public ChContactContainer::AddContactCallback {
                               ) override {
         // Print contact information
         std::cout << "\n";
-        std::cout << "Contact point on A: " << contactinfo.vpA << "\n"
+        std::cout << "Time: " << std::setprecision(8) << contactinfo.modelA->GetPhysicsItem()->GetChTime() << "\n"
+                  << "Contact point on A: " << contactinfo.vpA << "\n"
                   << "Contact point on B: " << contactinfo.vpB << "\n"
                   << "Contact normal: " << contactinfo.vN << "\n"
                   << "Contact distance: " << contactinfo.distance << "\n"
@@ -107,7 +109,7 @@ int main() {
     vis->EnableShadows();
 
     // Time step
-    double time_step    = 1e-3;
+    double time_step    = 1e-2;
     double time_current = 0.0;
     double time_end     = 2.0;
 
@@ -119,7 +121,7 @@ int main() {
         vis->EndScene();
 
         // Advance simulation by one step
-        sys.DoStepDynamics(0.001);
+        sys.DoStepDynamics(time_step);
 
         time_current += time_step;
     }
