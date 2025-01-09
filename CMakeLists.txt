@@ -137,7 +137,8 @@ set(DEMOS
   demo_MBS_collision_trimesh
   demo_MBS_collisionNSC
   demo_MBS_collisionSMC
-  demo_MBS_fallingbox
+  demo_MBS_fallingboxNSC
+  demo_MBS_fallingboxSMC
   my_example
 )
 
