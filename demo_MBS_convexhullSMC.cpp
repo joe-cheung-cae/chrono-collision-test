@@ -82,8 +82,7 @@ int main() {
         ground->SetName("Ground");
         ground->SetFixed(true);
 
-        auto groud_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile(
-            "/home/joe/repo/chrono-collision-test/data/obj/Ground.obj");
+        auto groud_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile("../data/obj/Ground.obj");
 
         auto groud_vis_shape = chrono_types::make_shared<ChVisualShapeTriangleMesh>();
         groud_vis_shape->SetMutable(false);
@@ -128,8 +127,8 @@ int main() {
         auto falling_box = chrono_types::make_shared<ChBodyAuxRef>();
         falling_box->SetName("FallingBox");
 
-        auto falling_box_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile(
-            "/home/joe/repo/chrono-collision-test/data/obj/FallingBoxPerpendicular.obj");
+        auto falling_box_mesh =
+            ChTriangleMeshConnected::CreateFromWavefrontFile("../data/obj/FallingBoxPerpendicular.obj");
 
         auto falling_box_vis_shape = chrono_types::make_shared<ChVisualShapeTriangleMesh>();
         falling_box_vis_shape->SetMutable(false);

@@ -41,29 +41,28 @@ int main() {
     auto mat = chrono_types::make_shared<ChContactMaterialNSC>();
 
     // Create the ground
-    auto ground = chrono_types::make_shared<ChBodyEasyMesh>(
-        "/home/joe/repo/chrono-collision-test/data/obj/Ground.obj",  // Mesh obejct
-        1000,                                                        // Density
-        true,                                                        // Visualize
-        true,                                                        // Collide
-        true,                                                        // Use material properties
-        mat,                                                         // Contact material
-        0.005                                                        // Sphere swept
+    auto ground = chrono_types::make_shared<ChBodyEasyMesh>("../data/obj/Ground.obj",  // Mesh obejct
+                                                            1000,                      // Density
+                                                            true,                      // Visualize
+                                                            true,                      // Collide
+                                                            true,                      // Use material properties
+                                                            mat,                       // Contact material
+                                                            0.005                      // Sphere swept
     );
     ground->GetVisualShape(0)->SetColor(ChColor(0.5f, 0.0f, 0.0f));
     ground->SetFixed(true);
     sys.AddBody(ground);
 
     // Create a falling box
-    auto falling_box = chrono_types::make_shared<ChBodyEasyMesh>(
-        "/home/joe/repo/chrono-collision-test/data/obj/FallingBoxPerpendicular.obj",  // mesh object
-        1000,                                                                         // density
-        true,                                                                         // visualize
-        true,                                                                         // collide
-        true,                                                                         // use material properties
-        mat,                                                                          // contact material
-        0.005                                                                         // sphere swept
-    );
+    auto falling_box =
+        chrono_types::make_shared<ChBodyEasyMesh>("../data/obj/FallingBoxPerpendicular.obj",  // mesh object
+                                                  1000,                                       // density
+                                                  true,                                       // visualize
+                                                  true,                                       // collide
+                                                  true,                                       // use material properties
+                                                  mat,                                        // contact material
+                                                  0.005                                       // sphere swept
+        );
     falling_box->SetFixed(false);
     falling_box->SetFrameRefToAbs(ChFrame<>(ChVector3d(0.0, 0.0, 1.0)));
     sys.AddBody(falling_box);

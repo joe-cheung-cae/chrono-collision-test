@@ -76,8 +76,7 @@ int main() {
 
     // Create the ground
     {
-        auto ground_tri_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile(
-            "/home/joe/repo/chrono-collision-test/data/obj/Ground.obj");
+        auto ground_tri_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile("../data/obj/Ground.obj");
         auto ground = chrono_types::make_shared<ChBodyEasyConvexHullAuxRef>(ground_tri_mesh->GetCoordsVertices(),
                                                                             density, true, true, mat);
         ground->SetFixed(true);
@@ -87,8 +86,8 @@ int main() {
 
     // Create a falling box
     {
-        auto falling_box_tri_mesh = ChTriangleMeshConnected::CreateFromWavefrontFile(
-            "/home/joe/repo/chrono-collision-test/data/obj/FallingBoxPerpendicular.obj");
+        auto falling_box_tri_mesh =
+            ChTriangleMeshConnected::CreateFromWavefrontFile("../data/obj/FallingBoxPerpendicular.obj");
         auto falling_box = chrono_types::make_shared<ChBodyEasyConvexHullAuxRef>(
             falling_box_tri_mesh->GetCoordsVertices(), density, true, true, mat);
         falling_box->SetFixed(false);
