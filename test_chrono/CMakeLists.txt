@@ -46,6 +46,8 @@ message(STATUS "    OpenMP_CXX_FLAGS is ${OpenMP_CXX_FLAGS}.")
 message(STATUS "Adding executables...")
 
 set(DEMOS
+  demo_CH_coordinate_system
+  demo_CH_eigen_solve
   demo_MBS_collision_2d
   demo_MBS_collision_trimesh
   demo_MBS_collisionNSC
@@ -67,7 +69,6 @@ foreach(PROGRAM ${DEMOS})
   target_compile_options(${PROGRAM} PUBLIC ${CHRONO_CXX_FLAGS})
   target_link_options(${PROGRAM} PUBLIC ${CHRONO_LINKER_FLAGS})
 
- 
   target_link_libraries(${PROGRAM} ${CHRONO_LIBRARIES})
 
   add_DLL_copy_command()
