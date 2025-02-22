@@ -6,7 +6,6 @@
 #include <CGAL/Surface_mesh.h>
 #include <CGAL/IO/OBJ.h>
 #include <CGAL/minkowski_sum_3.h>
-#include <CGAL/polygon_mesh_processing.h>
 #include <iostream>
 #include <fstream>
 
