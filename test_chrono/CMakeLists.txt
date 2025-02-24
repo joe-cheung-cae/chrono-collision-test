@@ -49,6 +49,7 @@ set(DEMOS
   demo_CH_coordinate_system
   demo_CH_eigen_solve
   demo_MBS_collision_2d
+  demo_MBS_collision_chrono
   demo_MBS_collision_trimesh
   demo_MBS_collisionNSC
   demo_MBS_collisionSMC
