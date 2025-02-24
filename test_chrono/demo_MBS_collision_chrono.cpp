@@ -26,10 +26,10 @@ class MyCallBackOnAddContack : public ChContactContainer::AddContactCallback {
         std::cout << "Time: " << std::setprecision(8) << contactinfo.modelA->GetPhysicsItem()->GetChTime() << "\n"
                   << "Contact point on A: " << contactinfo.vpA << "\n"
                   << "Contact point on B: " << contactinfo.vpB << "\n"
-                  << "Contact normal: " << contactinfo.vN << "\n"
-                  << "Contact distance: " << contactinfo.distance << "\n"
-                  << "Name A:" << contactinfo.modelA->GetPhysicsItem()->GetName() << "\n"
-                  << "Name B:" << contactinfo.modelB->GetPhysicsItem()->GetName() << "\n";
+                  << "Contact normal:     " << contactinfo.vN << "\n"
+                  << "Contact distance:   " << contactinfo.distance << "\n"
+                  << "Name A:             " << contactinfo.modelA->GetPhysicsItem()->GetName() << "\n"
+                  << "Name B:             " << contactinfo.modelB->GetPhysicsItem()->GetName() << "\n";
         std::cout << std::endl;
     }
 };
